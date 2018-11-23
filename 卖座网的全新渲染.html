@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="icon" type="text/css" href="./img/55.ico"/>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>卖座网</title>
+		<link rel="stylesheet" type="text/css" href="css/卖座网样式.css"/>
+		<script type="text/javascript" src="../js/ajax.js" ></script>
+		
+	</head>
+	<body>
+		<div id="big_box">
+				<div id="title">
+					<div class="tree_right">
+						<div id="tree"></div>
+					</div>
+					<span class="Tear">卖座电影</span>
+					<div id="toponymy">
+						<span class="Tear_right">深圳 &or;</span>
+						<img src="img/我的.png" class="print_1"/>
+					</div>
+				</div>
+				<div id="center">
+					<div id="center_left">正在热映</div>
+					<div id="center_right">即将上映</div>
+				</div>
+				<div id="matter">
+					<!--<div class="matter_box">
+						<div class="matter_left"><img src="img/iPhone.png" style="width: 100px;height: 124px;"/></div>
+						<div class="matter_center">
+						<p>铁血战士</p>
+						<p>铁血出征，寸草不生</p>
+						<p><span>100</span>家上映&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>50</span>人购票</p></div>
+						<div id="matter_right">8.0 &gt;</div>
+					</div>-->
+					
+				</div>
+				<div id="matter_copy">
+					<!--<div class="matter_box">
+						<div class="matter_left_1"><img src="img/iPhone.png" style="width: 100px;height: 124px;"/></div>
+						<div class="matter_center_1">
+						<p>铁血战士</p>
+						<p>铁血出征，寸草不生</p>
+						<p><span>11</span>月<span>2</span>日上映&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;星期<span>五</span></p></div>
+						<div id="matter_right_1">&gt;</div>
+					</div>-->
+					
+				</div>
+				<div class="hide_box">
+					<ul>
+						<li><a href="#"><span>首页</span><b>&gt;</b></a></li>
+						<li><a href="#"><span>影片</span><b>&gt;</b></a></li>
+						<li><a href="#"><span>影院</span><b>&gt;</b></a></li>
+						<li><a href="#"><span>商城</span><b>&gt;</b></a></li>
+						<li><a href="#"><span>我的</span><b>&gt;</b></a></li>
+						<li><a href="#"><span>卖座卡</span><b>&gt;</b></a></li>
+					</ul>
+					
+				</div>
+				
+		</div>
+		
+		<script>
+		
+		 	window.onload = function(){
+//--------------ajax在线渲染-------------------------------------------------------------------
+		 		var omat = document.getElementById("matter");
+		 		var omat_copy = document.getElementById("matter_copy");
+		 		var cent_left = document.getElementById("center_left");
+		 		var cent_right = document.getElementById("center_right");
+		 	
+		 			ajax("get", " https://www.easy-mock.com/mock/5bdc1b4996a2e50a9ee19854/example/nowPlay", "", function(Data){
+		 			
+		 			
+//		 			console.log(JSON.parse(Data))
+		 			
+		 			var films_2 = JSON.parse(Data);
+		 			
+		 			var outy = films_2.data.films;
+		 			
+		 			for(var i in outy){
+		 			
+		 			var each = outy[i];
+		 			
+		 			omat.innerHTML += '<div class="matter_box"><div class="matter_left"><img src="'+each.cover.origin+'" style="width: 95px;height: 110px;"/></div><div class="matter_center"><p>'+each.name+'</p><p>'+each.intro+'</p><p><span>'+each.cinemaCount+'</span>家上映&nbsp;<span>'+each.watchCount+'</span>人购票</p></div><div id="matter_right">'+each.grade+' &gt;</div></div>'
+		 			}
+		 			
+		 			})
+		 			
+		 			ajax("get", "  https://www.easy-mock.com/mock/5bdc1b4996a2e50a9ee19854/example/comingsoon", "", function(Data){
+		 			
+		 			
+//		 			console.log(JSON.parse(Data))
+		 			
+		 			var films_2 = JSON.parse(Data);
+		 			
+		 			var outy = films_2.data.films;
+		 			
+		 			for(var i in outy){
+		 			
+		 			var each = outy[i];
+		 			
+		 			omat_copy.innerHTML += '<div class="matter_box"><div class="matter_left_1"><img src="'+each.cover.origin+'" style="width: 95px;height: 110px;"/></div><div class="matter_center_1"><p>'+each.name+'</p><p>'+each.intro+'</p><p><span>'+timesTampToTime(each.premiereAt)[0]+'</span>月<span>'+timesTampToTime(each.premiereAt)[1]+'</span>日上映&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>'+timesTampToTime(each.premiereAt)[2]+'</span></p></div><div id="matter_right_1">&gt;</div></div>'
+		 			}
+		 			
+		 			})
+		 			cent_right.onclick = function (){
+		 				
+		 				omat.style.display = "none";
+		 				omat_copy.style.display = "block";
+		 				this.style.borderBottom = 3+"px solid red";
+		 				cent_left.style.borderBottom = "none";
+		 				cent_right.style.color = "#FD8122";
+		 				cent_left.style.color = "#000000";
+		 				
+		 			}
+		 			cent_left.onclick = function (){
+		 				
+		 				omat.style.display = "block";
+		 				omat_copy.style.display = "none";
+		 				this.style.borderBottom = 3+"px solid red";
+		 				cent_right.style.borderBottom = "none";
+		 				cent_right.style.color = "#000";
+		 				cent_left.style.color = "#FD8122";
+		 				
+		 			}
+		 			
+//-----------------日期封装函数-------------------------------------------------------------		 			
+		 			function timesTampToTime(timestamp) {
+					var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+					var Y = date.getFullYear() + '-';//获取时间戳里面的年数
+					var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';//获取时间戳里面的月数并加零
+					var D = date.getDate() + '-';//获取时间戳里面的天数
+					var h = date.getHours() + ':';//获取时间戳里面的小时
+					var m = date.getMinutes() + ':';//获取时间戳里面的分数
+					var s = date.getSeconds() + ':';//获取时间戳里面的秒数
+					var oDay = date.getDay();//获取时间戳里面的星期
+					var arr = ["星期天","星期一","星期二","星期三","星期四","星期五","星期六"];
+//					    return (Y+M+D+h+m+s+arr[oDay]);
+							return (M+D+arr[oDay]).split("-");
+				}
+				console.log(timesTampToTime(1544112000000));
+
+		 			
+//-------------------隐藏框-------------------------------------------------------------------------------
+					var ohide = document.getElementsByClassName("tree_right")[0];
+					var box_hide = document.getElementsByClassName("hide_box")[0];
+					var flag = true;
+					
+					ohide.onclick = function (){
+						
+						if(flag){
+							
+							box_hide.style.display = "block"
+						}else{
+							box_hide.style.display = "none"
+							
+						}
+						flag=!flag;
+						
+						
+					}
+					
+		 	}
+		
+		</script>
+	</body>
+</html>
